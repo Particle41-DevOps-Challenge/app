@@ -1,6 +1,6 @@
 ## SimpleTimeService – Deployment & Setup Documentation
 
- 1. Prerequisites
+ # 1. Prerequisites
 
 
     On the EC2 instance
@@ -15,7 +15,7 @@
 
     Port 8080 allowed in the EC2 security group (Inbound rule)
 
-2. Install & Configure Docker on EC2
+# 2. Install & Configure Docker on EC2
 
     Install Docker
         dnf -y install dnf-plugins-core
@@ -31,7 +31,7 @@
 
     Logout and login again so group changes will apply.
 
-3. Project Structure
+# 3. Project Structure
 
     Inside your project directory:
 
@@ -40,22 +40,26 @@
     ├── requirements.txt
     └── Dockerfile
 
-4. Python Files
+# 4. Python Files
     This is the source code of the SimpleTimeService
 
-5. requirements.txt
+# 5. requirements.txt
     This file defines the version of the modules
     
-6. Dockerfile
+# 6. Dockerfile
     The Dockerfile includes the steps to bulid the Docker image for the SimpleTimeService
+# 7. Build the Docker Image
 
-8. Run the Docker Container
+    Navigate to the application directory: cd ~/app
+    Build the docker image: docker build -t simpletime:latest .
+
+# 8. Run the Docker Container
 
     Use port mapping so the service is reachable: docker run -d --name simpletime -p 8080:8080 simpletime:latest
 
     Check running containers: docker ps
 
-9. Testing the Microservice
+# 9. Testing the Microservice
     From EC2 instance
     curl http://localhost:8080/
 
@@ -67,11 +71,11 @@
 
     http://13.217.231.160:8080/
 
-10. Accessing the Container Shell
+# 10. Accessing the Container Shell
 
     This image uses sh, not bash: docker exec -it simpletime sh
 
-11. Stopping or Removing the Service
+# 11. Stopping or Removing the Service
     Stop
     docker stop simpletime
 
