@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def root():
-    # Current timestamp in ISO 8601 format (UTC)
+    # Current timestamp
     timestamp = datetime.utcnow().isoformat() + "Z"
 
     # Extract client IP

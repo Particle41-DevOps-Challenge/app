@@ -1,0 +1,45 @@
+## What each import does:
+
+* Flask
+The main class used to create a web application. It handles routing, request handling, server startup, etc.
+
+* request
+A Flask object that contains all the information about the incoming HTTP request, including headers, client IP, method, and URL path.
+
+* jsonify
+A Flask helper function that converts Python dictionaries into valid JSON responses and automatically sets the correct headers (Content-Type: application/json).
+
+* datetime
+Used for generating the current timestamp.
+
+* os
+Allows reading environment variables—important later when the app runs inside Docker or Kubernetes.
+
+
+## Defining the Main Route
+@app.route("/", methods=["GET"])
+def root():
+
+* What this means
+
+* @app.route("/")
+This is a decorator that binds the function root() to the route /.
+Meaning: when a user visits http://<server-ip>/, this function executes.
+
+* methods=["GET"]
+Ensures the route only accepts GET requests, which matches the task requirements.
+
+* def root():
+This function is the handler for the request.
+
+
+## Generating the Timestamp
+timestamp = datetime.utcnow().isoformat() + "Z"
+
+* Explanation:
+
+* datetime.utcnow() gets the current time in UTC 
+
+* .isoformat() converts the datetime into ISO 8601 format, such as: 2025-01-15T12:45:30.123456
+
+* Adding "Z" at the end indicates Zulu time (another way to say UTC).
