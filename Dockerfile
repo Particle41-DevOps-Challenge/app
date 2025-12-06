@@ -14,8 +14,9 @@ EXPOSE 8080
 WORKDIR /opt/server
 # Runtime dependencies only
 RUN apk add --no-cache libgcc
-#Create app user
+#Create appuser
 RUN addgroup -S appuser && adduser -S appuser -G appuser
+#Switching to non-root user
 USER appuser
 # Copy installed Python packages from builder
 COPY --from=builder /install /usr/local
