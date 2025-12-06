@@ -1,45 +1,86 @@
-## What each import does:
+## SimpleTimeService – Deployment & Setup Documentation
 
-* Flask
-The main class used to create a web application. It handles routing, request handling, server startup, etc.
-
-* request
-A Flask object that contains all the information about the incoming HTTP request, including headers, client IP, method, and URL path.
-
-* jsonify
-A Flask helper function that converts Python dictionaries into valid JSON responses and automatically sets the correct headers (Content-Type: application/json).
-
-* datetime
-Used for generating the current timestamp.
-
-* os
-Allows reading environment variables—important later when the app runs inside Docker or Kubernetes.
+ 1. Prerequisites
 
 
-## Defining the Main Route
-@app.route("/", methods=["GET"])
-def root():
+    On the EC2 instance
 
-* What this means
+    An Amazon Linux 2 or Ubuntu EC2 instance with:
 
-* @app.route("/")
-This is a decorator that binds the function root() to the route /.
-Meaning: when a user visits http://<server-ip>/, this function executes.
+    Python 3 installed
 
-* methods=["GET"]
-Ensures the route only accepts GET requests, which matches the task requirements.
+    Docker installed
 
-* def root():
-This function is the handler for the request.
+    Docker service running
 
+    Port 8080 allowed in the EC2 security group (Inbound rule)
 
-## Generating the Timestamp
-timestamp = datetime.utcnow().isoformat() + "Z"
+2. Install & Configure Docker on EC2
 
-* Explanation:
+    Install Docker
+        dnf -y install dnf-plugins-core
+        dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+        dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+        
+    Start Docker service
+        systemctl start docker
+        systemctl enable docker
 
-* datetime.utcnow() gets the current time in UTC 
+    Add ec2-user to docker group
+        usermod -aG docker ec2-user
 
-* .isoformat() converts the datetime into ISO 8601 format, such as: 2025-01-15T12:45:30.123456
+    Logout and login again so group changes will apply.
 
-* Adding "Z" at the end indicates Zulu time (another way to say UTC).
+3. Project Structure
+
+    Inside your project directory:
+
+    app/
+    ├── main.py
+    ├── requirements.txt
+    └── Dockerfile
+
+4. Python Files
+    This is the source code of the SimpleTimeService
+
+5. requirements.txt
+    This file defines the version of the modules
+    
+6. Dockerfile
+    The Dockerfile includes the steps to bulid the Docker image for the SimpleTimeService
+
+8. Run the Docker Container
+
+    Use port mapping so the service is reachable: docker run -d --name simpletime -p 8080:8080 simpletime:latest
+
+    Check running containers: docker ps
+
+9. Testing the Microservice
+    From EC2 instance
+    curl http://localhost:8080/
+
+    From your browser
+    Use the EC2 public IP:
+    http://<EC2-PUBLIC-IP>:8080/
+            
+    Example:
+
+    http://13.217.231.160:8080/
+
+10. Accessing the Container Shell
+
+    This image uses sh, not bash: docker exec -it simpletime sh
+
+11. Stopping or Removing the Service
+    Stop
+    docker stop simpletime
+
+    Start again
+    docker start simpletime
+
+    Remove
+    docker rm -f simpletime
+
+Setup Completed
+
+The SimpleTimeService microservice is now fully deployed using Docker on AWS EC2.
